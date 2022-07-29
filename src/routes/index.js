@@ -1,15 +1,19 @@
-const Router = require('express').Router;
-const UserController = require('../controllers/user-controller');
+import {Router} from "express";
+import UserController from "../controllers/user-controller.js";
+import {registerValidation} from "../../validations.js";
+import handleValidationErrors from "../utils/handleValidationErrors.js";
+import checkAuth from "../utils/checkAuth.js";
+
+export const routerAuth = new Router()
 
 
- const routerAuth = new Router()
+routerAuth.post('/registration',registerValidation,handleValidationErrors,UserController.registration)
+routerAuth.post('/login', UserController.login)
 
 
-routerAuth.post('/registration',UserController.registration)
-routerAuth.post('/login',UserController.login)
-routerAuth.post('/logout',UserController.logout)
-routerAuth.get('/activate/:link',UserController.activate)
-routerAuth.get('/refresh',UserController.refresh)
-routerAuth.get('/users',UserController.getUsers)
+export const routerUsers = new Router()
 
-module.exports = routerAuth
+routerUsers.get('/users', UserController.getUsers)
+routerUsers.get('/me',checkAuth, UserController.authMe)
+routerUsers.put('/update/:id', UserController.updateUser)
+

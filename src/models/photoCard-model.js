@@ -1,12 +1,13 @@
-const {Schema, model} = require('mongoose');
+import mongoose from "mongoose";
 
 
-const PhotoCardSchema = new Schema({
-    id:{type:Number,unique:true,required:true},
-    photoUrl:{type:String,required:true},
-    description:{type:String},
-    likes:{type:Number,default:0},
-    comments:{type:Number,default:0},
-})
+const PhotoCardSchema = new mongoose.Schema({
+        user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true,},
+        photoUrl: {type: String, required: true},
+        description: {type: String},
+        likes: {type: Number, default: 0},
+        comments: {type: Number, default: 0},
+    },
+    {timestamps: true})
 
-module.exports = model('PhotoCard', PhotoCardSchema);
+export default mongoose.model('PhotoCard', PhotoCardSchema);
