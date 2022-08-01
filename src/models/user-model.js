@@ -7,8 +7,7 @@ const UserSchema = new mongoose.Schema({
         passwordHash: {type: String, required: true},
         userStatus: {type: String, default: ''},
         userAvatar: {type: String, default: ''},
-        // photoCard: {type: mongoose.Schema.Types.Array, ref: 'PhotoCard'},
-
+        photoCards: [{type:mongoose.Schema.Types.ObjectId,ref:'PhotoCard'}]
     },
     {timestamps: true})
 

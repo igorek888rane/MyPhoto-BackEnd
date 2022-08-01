@@ -1,6 +1,8 @@
 import UserModel from "../models/user-model.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
+import path, {dirname} from 'path';
+import {fileURLToPath} from 'url';
 
 
 class UserController {
@@ -98,8 +100,19 @@ class UserController {
         try {
 
             const userId = req.params.id;
-            const user = req.body;
-            const userName = user?.userName
+            const userUpdate = req.body;
+            if (req.files) {
+                console.log(req.files)
+                let fileName = Date.now().toString() + req.files.userAvatar.name
+                const __dirname = dirname(fileURLToPath(import.meta.url))
+                req.files.userAvatar.mv(path.join(__dirname, '../..', 'uploads/userAvatar', fileName))
+                await UserModel.findByIdAndUpdate(userId, {
+                    userAvatar: fileName,
+                })
+
+
+            }
+            const userName = userUpdate?.userName
             if (userName) {
                 if (userName.length < 3 || userName.length > 16) {
                     return res.status(400).json({message: "Имя пользователя должно быть минимум 3 максимум 16 символа "})
@@ -111,7 +124,7 @@ class UserController {
             }
 
             await UserModel.findByIdAndUpdate({_id: userId}, {
-                ...user
+                ...userUpdate
             })
             res.json({
                 success: true
@@ -123,6 +136,8 @@ class UserController {
             });
         }
     }
+
+
 }
 
 export default new UserController()

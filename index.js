@@ -2,7 +2,9 @@ import * as dotenv from 'dotenv'
 import express from 'express'
 import mongoose from "mongoose";
 import cors from "cors";
-import {routerAuth, routerUsers} from "./src/routes/index.js";
+import {routerAuth, routerUsers, routerPhoto} from "./src/routes/index.js";
+import fileUpload from 'express-fileupload';
+
 
 dotenv.config()
 
@@ -14,14 +16,17 @@ const DB_URL = process.env.DB_URL;
 const app = express();
 
 
+
 app.use(express.json())
+app.use(fileUpload({}))
+app.use('/uploads',express.static('uploads'))
 
 app.use(cors())
+
 app.use('/auth', routerAuth)
-app.use('/api', routerUsers)
+app.use('/user', routerUsers)
+app.use('/photo', routerPhoto)
 
-
-// console.log(process.env.DB_URL);
 
 async function startApp() {
     try {

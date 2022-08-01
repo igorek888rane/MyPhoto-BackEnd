@@ -6,7 +6,7 @@ const PhotoCardSchema = new mongoose.Schema({
         photoUrl: {type: String, required: true},
         description: {type: String},
         likes: {type: Number, default: 0},
-        comments: {type: Number, default: 0},
+        comments: [{type:mongoose.Schema.Types.ObjectId,ref:'Comment'}],
     },
     {timestamps: true})
 
