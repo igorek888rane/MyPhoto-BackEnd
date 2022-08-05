@@ -7,7 +7,9 @@ const UserSchema = new mongoose.Schema({
         passwordHash: {type: String, required: true},
         userStatus: {type: String, default: ''},
         userAvatar: {type: String, default: ''},
-        photoCards: [{type:mongoose.Schema.Types.ObjectId,ref:'PhotoCard'}]
+        photoCards: [{type: mongoose.Schema.Types.ObjectId, ref: 'PhotoCard'}],
+        likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'PhotoCard'}],
+        subscriptions: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     },
     {timestamps: true})
 

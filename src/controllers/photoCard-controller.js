@@ -6,7 +6,8 @@ import {fileURLToPath} from 'url';
 class PhotoCardController {
     async createPhotoCard(req, res) {
         try {
-            const userId = req.params.id;
+
+            const userId = req.userId;
             let fileName = Date.now().toString() + req.files.photoUrl.name
             const __dirname = dirname(fileURLToPath(import.meta.url))
             req.files.photoUrl.mv(path.join(__dirname,'../..','uploads/PhotoCard',fileName))
@@ -36,15 +37,14 @@ class PhotoCardController {
 
     async updatePhotoCard(req, res) {
         try {
+
+
             const items = req.body
             const photoCardId = req.params.id
-            await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
+           const photoCard =  await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
                 ...items
             })
-            res.json({
-                success: true,
-
-            })
+            res.json(photoCard)
         } catch (e) {
             console.log(e);
             res.status(500).json({
@@ -75,13 +75,11 @@ class PhotoCardController {
     async getPhotoCardUser(req, res) {
         try {
             const userId = req.params.id
-            const photoCard = await PhotoCardModel.find({user: userId})
-            res.json({
-                success: true,
-                photoCard
-            })
+            const photoCards = await PhotoCardModel.find({user: userId})
+
+            res.json(photoCards)
         } catch (e) {
-            res.json({message: 'Не удалось найти посты'})
+            res.json({message: 'Не удалось найти фото'})
         }
     }
 
@@ -100,10 +98,7 @@ class PhotoCardController {
     async getOne(req, res) {
         try {
             const photoCard = await PhotoCardModel.findById(req.params.id)
-            res.json({
-                success: true,
-                photoCard
-            })
+            res.json(photoCard)
         } catch (e) {
             res.json({message: 'Не удалось найти пост'})
         }

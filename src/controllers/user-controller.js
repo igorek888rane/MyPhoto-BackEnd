@@ -27,7 +27,7 @@ class UserController {
                 _id: user._id,
             }, process.env.JWT_ACCESS_SECRET, {expiresIn: '30d'})
 
-            const {passwordHash, ...userData} = user._doc
+            const {passwordHash, createdAt, updatedAt, photoCards, ...userData} = user._doc
             res.json({...userData, token})
         } catch (e) {
             console.log(e);
@@ -54,7 +54,7 @@ class UserController {
             }
             const token = jwt.sign(
                 {_id: user._id,}, process.env.JWT_ACCESS_SECRET, {expiresIn: '30d',});
-            const {passwordHash, ...userData} = user._doc
+            const {passwordHash, createdAt, updatedAt, ...userData} = user._doc
             res.json({...userData, token})
 
         } catch (e) {
@@ -75,7 +75,7 @@ class UserController {
                 });
             }
 
-            const {passwordHash, ...userData} = user._doc;
+            const {passwordHash, createdAt, updatedAt, ...userData} = user._doc;
 
             res.json(userData);
 
@@ -91,6 +91,16 @@ class UserController {
         try {
             const users = await UserModel.find()
             res.json(users)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async getUser(req, res) {
+        try {
+            const user = await UserModel.findOne({userName: req.params.id})
+            const {passwordHash, createdAt, updatedAt, ...userData} = user._doc
+            res.json(userData)
         } catch (e) {
             console.log(e)
         }
@@ -115,25 +125,22 @@ class UserController {
             const userName = userUpdate?.userName
             if (userName) {
                 if (userName.length < 3 || userName.length > 16) {
-                    return res.status(400).json({message: "Имя пользователя должно быть минимум 3 максимум 16 символа "})
+                    return res.status(404).json( "Имя пользователя должно быть минимум 3 максимум 16 символа ")
                 }
                 const userNameCheck = await UserModel.findOne({userName})
                 if (userNameCheck) {
-                    return res.status(400).json({message: "Это имя пользователя уже занято"})
+                    return res.status(404).json( "Это имя пользователя уже занято")
                 }
             }
 
             await UserModel.findByIdAndUpdate({_id: userId}, {
                 ...userUpdate
             })
-            res.json({
-                success: true
-            })
+             const user = await UserModel.findById({_id: userId})
+            res.json(user)
         } catch (e) {
             console.log(e);
-            res.status(500).json({
-                message: 'Не удалось обновить данные пользователя',
-            });
+            res.status(500).json('Не удалось обновить данные пользователя');
         }
     }
 

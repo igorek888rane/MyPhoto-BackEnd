@@ -17,14 +17,15 @@ export const routerUsers = new Router()
 
 routerUsers.get('/users', UserController.getUsers)
 routerUsers.get('/me',checkAuth, UserController.authMe)
-routerUsers.put('/update/:id', UserController.updateUser)
+routerUsers.get('/user/:id', UserController.getUser)
+routerUsers.put('/update/:id',checkAuth, UserController.updateUser)
 
 
 export const routerPhoto = new Router()
 
-routerPhoto.post('/create-photo/:id', PhotoCardController.createPhotoCard)
-routerPhoto.put('/update-photo/:id', PhotoCardController.updatePhotoCard)
+routerPhoto.post('/create-photo',checkAuth, PhotoCardController.createPhotoCard)
+routerPhoto.put('/update-photo/:id',checkAuth, PhotoCardController.updatePhotoCard)
 routerPhoto.delete('/delete/:id',checkAuth, PhotoCardController.deletePhotoCard)
-routerPhoto.get('/get-photo-user/:id', PhotoCardController.getPhotoCardUser)
+routerPhoto.get('/get-photo-user/:id',checkAuth, PhotoCardController.getPhotoCardUser)
 routerPhoto.get('/get-all', PhotoCardController.getAll)
 routerPhoto.get('/get-one/:id', PhotoCardController.getOne)
