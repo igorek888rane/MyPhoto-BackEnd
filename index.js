@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import {routerAuth, routerUsers, routerPhoto} from "./routes/index.js";
 import fileUpload from 'express-fileupload';
-import * as fs from "fs";
+
 
 
 dotenv.config()
@@ -20,18 +20,6 @@ const app = express();
 
 app.use(express.json())
 app.use(fileUpload({}))
-app.use(()=>{
-    if(fs.existsSync('uploads')){
-        fs.mkdirSync('uploads')
-    }})
-app.use(()=>{
-    if(fs.existsSync('PhotoCard')){
-        fs.mkdirSync('PhotoCard')
-    }})
-app.use(()=>{
-    if(fs.existsSync('userAvatar')){
-        fs.mkdirSync('userAvatar')
-    }})
 app.use('/uploads',express.static('uploads'))
 
 app.use(cors())
