@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(fileUpload({}))
 app.use('/uploads',express.static('uploads'))
 
-app.use(cors())
+// app.use(cors())
 
 app.use('/auth', routerAuth)
 app.use('/user', routerUsers)
