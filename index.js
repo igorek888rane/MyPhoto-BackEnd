@@ -20,10 +20,13 @@ app.use(express.json())
 app.use(fileUpload({}))
 app.use('/uploads', express.static('uploads'))
 
-app.use(cors())
+app.use(cors({
+    origin: ['https://my-photo-zeta.vercel.app'],
+    credentials: true
+}))
 app.use( (req, res, next) => {
 
-    res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.header('Access-Control-Allow-Origin', "https://my-photo-zeta.vercel.app");
     res.header('Access-Control-Allow-Headers', true);
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
