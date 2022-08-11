@@ -6,7 +6,6 @@ import {routerAuth, routerUsers, routerPhoto} from "./routes/index.js";
 import fileUpload from 'express-fileupload';
 
 
-
 dotenv.config()
 
 
@@ -17,12 +16,19 @@ const DB_URL = process.env.DB_URL;
 const app = express();
 
 
-
 app.use(express.json())
 app.use(fileUpload({}))
-app.use('/uploads',express.static('uploads'))
+app.use('/uploads', express.static('uploads'))
 
-// app.use(cors())
+app.use(cors())
+app.use( (req, res, next) => {
+
+    res.header('Access-Control-Allow-Origin', "http://localhost:3000");
+    res.header('Access-Control-Allow-Headers', true);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    next();
+});
 
 app.use('/auth', routerAuth)
 app.use('/user', routerUsers)
