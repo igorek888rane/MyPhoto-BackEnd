@@ -17,8 +17,11 @@ export const routerUsers = new Router()
 
 routerUsers.get('/users', UserController.getUsers)
 routerUsers.get('/me',checkAuth, UserController.authMe)
-routerUsers.get('/user/:id', UserController.getUser)
+routerUsers.get('/user/:userName', UserController.getUser)
+routerUsers.get('/user-by-id/:id', UserController.getUserById)
 routerUsers.put('/update/:id',checkAuth, UserController.updateUser)
+routerUsers.put('/subscribe/:id',checkAuth, UserController.subscribe)
+routerUsers.put('/unsubscribe/:id',checkAuth, UserController.unsubscribe)
 
 
 export const routerPhoto = new Router()

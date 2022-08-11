@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
         photoCards: [{type: mongoose.Schema.Types.ObjectId, ref: 'PhotoCard'}],
         likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'PhotoCard'}],
         subscriptions: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        subscribers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     },
     {timestamps: true})
 

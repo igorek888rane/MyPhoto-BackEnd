@@ -98,7 +98,16 @@ class UserController {
 
     async getUser(req, res) {
         try {
-            const user = await UserModel.findOne({userName: req.params.id})
+            const user = await UserModel.findOne({userName: req.params.userName})
+            const {passwordHash, createdAt, updatedAt, ...userData} = user._doc
+            res.json(userData)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    async getUserById(req, res) {
+        try {
+            const user = await UserModel.findById(req.params.id)
             const {passwordHash, createdAt, updatedAt, ...userData} = user._doc
             res.json(userData)
         } catch (e) {
@@ -125,23 +134,61 @@ class UserController {
             const userName = userUpdate?.userName
             if (userName) {
                 if (userName.length < 3 || userName.length > 16) {
-                    return res.status(404).json( "Имя пользователя должно быть минимум 3 максимум 16 символа ")
+                    return res.status(404).json("Имя пользователя должно быть минимум 3 максимум 16 символа ")
                 }
                 const userNameCheck = await UserModel.findOne({userName})
                 if (userNameCheck) {
-                    return res.status(404).json( "Это имя пользователя уже занято")
+                    return res.status(404).json("Это имя пользователя уже занято")
                 }
             }
 
             await UserModel.findByIdAndUpdate({_id: userId}, {
                 ...userUpdate
             })
-             const user = await UserModel.findById({_id: userId})
+            const user = await UserModel.findById({_id: userId})
             res.json(user)
         } catch (e) {
             console.log(e);
             res.status(500).json('Не удалось обновить данные пользователя');
         }
+    }
+
+    async subscribe(req, res) {
+      try{
+          const userId = req.userId
+          const subId = req.params.id
+          await UserModel.findByIdAndUpdate(userId,{
+              $push: {subscriptions: subId}
+          })
+          await UserModel.findByIdAndUpdate(subId,{
+              $push: {subscribers: userId}
+          })
+          res.json(subId)
+      }catch (e) {
+          console.log(e)
+          res.status(500).json('Не удалось подписаться')
+
+      }
+
+    }
+
+    async unsubscribe(req, res) {
+        try{
+            const userId = req.userId
+            const subId = req.params.id
+            await UserModel.findByIdAndUpdate(userId,{
+                $pull: {subscriptions: subId}
+            })
+            await UserModel.findByIdAndUpdate(subId,{
+                $pull: {subscribers: userId}
+            })
+            res.json(subId)
+        }catch (e) {
+            console.log(e)
+            res.status(500).json('Не удалось подписаться')
+
+        }
+
     }
 
 

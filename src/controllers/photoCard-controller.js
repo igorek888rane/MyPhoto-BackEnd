@@ -10,7 +10,7 @@ class PhotoCardController {
             const userId = req.userId;
             let fileName = Date.now().toString() + req.files.photoUrl.name
             const __dirname = dirname(fileURLToPath(import.meta.url))
-            req.files.photoUrl.mv(path.join(__dirname,'../..','uploads/PhotoCard',fileName))
+            req.files.photoUrl.mv(path.join(__dirname, '../..', 'uploads/PhotoCard', fileName))
 
             const doc = new PhotoCardModel({
                 user: userId,
@@ -37,14 +37,32 @@ class PhotoCardController {
 
     async updatePhotoCard(req, res) {
         try {
-
-
-            const items = req.body
             const photoCardId = req.params.id
-           const photoCard =  await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
-                ...items
-            })
-            res.json(photoCard)
+            const count = Number(req.body.likes)
+
+            if (req.body.likes) {
+                const photoCard = await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
+                    $inc: {likes: count}
+                })
+                if(count===1){
+                    await UserModel.findByIdAndUpdate({_id: req.userId}, {
+                        $push: {likes: req.params.id}
+                    })
+                }else if(count===-1){
+                    await UserModel.findByIdAndUpdate({_id: req.userId}, {
+                        $pull: {likes: req.params.id}
+                    })
+                }
+
+                res.json(photoCard)
+            }else {
+                const items = req.body
+                const photoCard = await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
+                    ...items
+                })
+                res.json(photoCard)
+            }
+
         } catch (e) {
             console.log(e);
             res.status(500).json({
@@ -86,10 +104,7 @@ class PhotoCardController {
     async getAll(req, res) {
         try {
             const photoCards = await PhotoCardModel.find().sort('-createdAt')
-            res.json({
-                success: true,
-                photoCards
-            })
+            res.json(photoCards)
         } catch (e) {
             res.json({message: 'Не удалось найти посты'})
         }
