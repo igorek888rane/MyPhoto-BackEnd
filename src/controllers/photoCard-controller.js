@@ -2,6 +2,7 @@ import PhotoCardModel from "../models/photoCard-model.js";
 import UserModel from "../models/user-model.js";
 import path, {dirname} from 'path';
 import {fileURLToPath} from 'url';
+import userModel from "../models/user-model.js";
 
 class PhotoCardController {
     async createPhotoCard(req, res) {
@@ -44,18 +45,18 @@ class PhotoCardController {
                 const photoCard = await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
                     $inc: {likes: count}
                 })
-                if(count===1){
+                if (count === 1) {
                     await UserModel.findByIdAndUpdate({_id: req.userId}, {
                         $push: {likes: req.params.id}
                     })
-                }else if(count===-1){
+                } else if (count === -1) {
                     await UserModel.findByIdAndUpdate({_id: req.userId}, {
                         $pull: {likes: req.params.id}
                     })
                 }
 
                 res.json(photoCard)
-            }else {
+            } else {
                 const items = req.body
                 const photoCard = await PhotoCardModel.findByIdAndUpdate({_id: photoCardId}, {
                     ...items
@@ -116,6 +117,20 @@ class PhotoCardController {
             res.json(photoCard)
         } catch (e) {
             res.json({message: 'Не удалось найти пост'})
+        }
+    }
+
+    async getPhotoCardSubscribe(req, res) {
+        try {
+            const user = await userModel.findById(req.userId)
+            const photoCards = []
+            const photo = await Promise.all(
+                user.subscriptions.map(user => PhotoCardModel.find({user: user}).sort('-createdAt'))
+            )
+            photo.forEach(el=>el.forEach(p=>photoCards.push(p)))
+            res.json(photoCards)
+        } catch (e) {
+            res.json({message: 'Не удалось найти фото'})
         }
     }
 }
