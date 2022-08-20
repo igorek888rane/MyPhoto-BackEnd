@@ -94,7 +94,7 @@ class PhotoCardController {
     async getPhotoCardUser(req, res) {
         try {
             const userId = req.params.id
-            const photoCards = await PhotoCardModel.find({user: userId})
+            const photoCards = await PhotoCardModel.find({user: userId}).sort('-createdAt')
 
             res.json(photoCards)
         } catch (e) {

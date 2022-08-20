@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv'
 import express from 'express'
 import mongoose from "mongoose";
 import cors from "cors";
-import {routerAuth, routerUsers, routerPhoto} from "./src/routes/index.js";
+import {routerAuth, routerUsers, routerPhoto, routerComment} from "./src/routes/index.js";
 import fileUpload from 'express-fileupload';
 
 
@@ -26,6 +26,7 @@ app.use(cors())
 app.use('/auth', routerAuth)
 app.use('/user', routerUsers)
 app.use('/photo', routerPhoto)
+app.use('/comment', routerComment)
 
 
 async function startApp() {

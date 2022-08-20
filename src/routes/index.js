@@ -4,6 +4,7 @@ import {registerValidation} from "../../validations.js";
 import handleValidationErrors from "../utils/handleValidationErrors.js";
 import checkAuth from "../utils/checkAuth.js";
 import PhotoCardController from "../controllers/photoCard-controller.js";
+import CommentController from "../controllers/comment-controller.js";
 
 export const routerAuth = new Router()
 
@@ -33,3 +34,9 @@ routerPhoto.get('/get-photo-user/:id', checkAuth, PhotoCardController.getPhotoCa
 routerPhoto.get('/get-all', PhotoCardController.getAll)
 routerPhoto.get('/get-one/:id', PhotoCardController.getOne)
 routerPhoto.get('/get-photo-subscribe', checkAuth, PhotoCardController.getPhotoCardSubscribe)
+
+
+export const routerComment = new Router()
+
+routerComment.post('/create-comment', checkAuth, CommentController.createComment)
+routerComment.get('/get-comments', CommentController.getCommentsPhoto)
