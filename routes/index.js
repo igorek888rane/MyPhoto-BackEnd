@@ -1,6 +1,6 @@
 import {Router} from "express";
 import UserController from "../controllers/user-controller.js";
-import {registerValidation} from "../../validations.js";
+import {registerValidation} from "../validations.js";
 import handleValidationErrors from "../utils/handleValidationErrors.js";
 import checkAuth from "../utils/checkAuth.js";
 import PhotoCardController from "../controllers/photoCard-controller.js";

@@ -2,8 +2,8 @@ import * as dotenv from 'dotenv'
 import express from 'express'
 import mongoose from "mongoose";
 import cors from "cors";
-import {routerAuth, routerUsers, routerPhoto, routerComment} from "./src/routes/index.js";
 import fileUpload from 'express-fileupload';
+import {routerAuth, routerComment, routerPhoto, routerUsers} from "./routes/index.js";
 
 
 dotenv.config()
