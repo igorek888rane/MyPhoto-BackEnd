@@ -124,7 +124,7 @@ class UserController {
                 console.log(req.files)
                 let fileName = Date.now().toString() + req.files.userAvatar.name
                 const __dirname = dirname(fileURLToPath(import.meta.url))
-                req.files.userAvatar.mv(path.join(__dirname, '../..', 'uploads/userAvatar', fileName))
+                req.files.userAvatar.mv(path.join(__dirname, '../', 'uploads/userAvatar', fileName))
                 await UserModel.findByIdAndUpdate(userId, {
                     userAvatar: fileName,
                 })

@@ -11,7 +11,7 @@ class PhotoCardController {
             const userId = req.userId;
             let fileName = Date.now().toString() + req.files.photoUrl.name
             const __dirname = dirname(fileURLToPath(import.meta.url))
-            req.files.photoUrl.mv(path.join(__dirname, '../..', 'uploads/PhotoCard', fileName))
+            req.files.photoUrl.mv(path.join(__dirname, '../', 'uploads/PhotoCard', fileName))
 
             const doc = new PhotoCardModel({
                 user: userId,
